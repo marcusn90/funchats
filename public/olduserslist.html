@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Starter</title>
+<!-- CSS -->
+	<link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/style.css">
+
+	<!-- JS -->
+	<!--
+	<script src="libs/jquery/jquery.min.js"></script>
+	 <script src="libs/bootstrap/dist/js/bootstrap.min.js"></script>
+	  -->
+	<script src="libs/angular/angular.min.js"></script>
+	<script src="libs/angular-route/angular-route.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	
+	<script src="app/app.js"></script>
+</head>
+<body>
+	<div class="main container" ng-app="app">
+		<div ng-controller="UsersCtrl">
+
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<div class="row">
+						<div class="col-md-9">Пацики =)</div>
+						<div class="col-md-3"><input ng-model="namefilter" placeholder="Фільтер по імені" class="form-control name-filter"></div>
+					</div>
+				</div>
+				<ul class="list-group">
+					<li class="list-group-item" ng-repeat="user in users | filter:namefilter">
+						{{user.first_name}} {{user.last_name}}
+					</li>
+				</ul>
+			</div>
+			
+			<form name="userForm" class="form-inline" role="form">
+				<div class="form-group">
+					<input ng-model="first_name" class="form-control" placeholder="Ім'я" required>
+				</div>
+				<div class="form-group">
+					<input ng-model="last_name" class="form-control" placeholder="Прізвище" required>
+				</div>
+				<button ng-disabled="userForm.$invalid" class="btn btn-primary" ng-click="addUser()"> <span class="glyphicon glyphicon-plus"></span> Додати</button>
+			</form>
+
+		</div>
+	</div>
+Message me: <input class="form-control" name="thetext" id="thetext" />
+<a href="#" class="btn" id="sendall" onclick="notifyAll()">SEND</a>
+<script>
+
+  var socket = io.connect('/');
+  socket.on('connection',function(){
+  	console.log('socket connected');
+  });
+  socket.on('globalMsg', function (data) {
+    console.log(data);
+    alert(data);
+  });
+	var notifyAll = function(){
+		if(socket){
+			var el = document.getElementById('thetext');
+			if( el && el.value ){
+				socket.emit('notifyall',el.value);
+			}
+		}
+	}
+</script>
+</body>
+</html>

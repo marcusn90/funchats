@@ -1,0 +1,10 @@
+.main{margin:30px auto;border-bottom:1px solid #dfdfdf; width:600px;}
+.name-filter{height:24px;font-size:10px;}
+
+.input-wrap{position:relative;margin-bottom:15px;}
+.input-wrap .btn{position:absolute;right:0;top:0;}
+header{widows: 100%;background-color:#333;}
+header .navbar{width:600px;margin:0 auto;}
+.navbar .username{font-weight:bold;letter-spacing:1px;color:#ddd;}
+.navbar .username:hover{color:#C4EEC2;text-decoration:none;}
+.username .icon{margin-right:5px;}

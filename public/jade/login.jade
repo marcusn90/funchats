@@ -1,0 +1,39 @@
+doctype html
+html
+	head
+		title FunChats
+
+		script(src="libs/angular/angular.min.js")
+		script(src="libs/angular-route/angular-route.min.js")
+		- //script(src="/socket.io/socket.io.js")
+		- //script(src="app/truechat.js")
+
+		link(href="libs/bootstrap/dist/css/bootstrap.min.css",rel="stylesheet")
+		link(href="css/style.css",rel="stylesheet")
+
+	body
+		.container.main
+			.row
+				.col-md-6
+					h2 Sign Up
+					form(method="post",name="signupForm",action="/signup")
+						.form-group
+							label(for="email") Email
+							input.form-control(name="email")
+						.form-group
+							label(for="nickname") Nickname
+							input.form-control(name="nickname")
+						.form-group
+							label(for="password") Password	
+							input.form-control(name="password",type="password")
+						button.btn.btn-primary Sign Up
+				.col-md-6
+					h2 Login
+					form(method="post",name="loginForm",action="/login")
+						.form-group
+							label(for="email") Email
+							input.form-control(name="email")
+						.form-group
+							label(for="password") Password	
+							input.form-control(name="password",type="password")
+						button.btn.btn-warning Login
