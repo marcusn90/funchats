@@ -7,17 +7,13 @@ var Chat = mongoose.model('chat');
 
 module.exports = function(app){
 	app.get('/',function(req,res){
-		if(!req.isAuthenticated()){
-			res.redirect('/getstarted');
+		if(req.isAuthenticated()){
+			res.redirect('/account');
 		}else{
 			// console.log(req.user);
 			jade.renderFile('./public/jade/home.jade',{theuser:req.user},function(err,html){
-				if(err){
-					res.send(err);
-				}
-				if(html){
-					res.send(html);
-				}
+				if(err){ res.send(err);}
+				if(html){res.send(html);}
 			});
 		}
 	});
@@ -31,6 +27,47 @@ module.exports = function(app){
 				}
 				if(html){
 					res.send(html);
+				}
+			});
+		}
+	});
+	app.get('/account',function(req,res){
+		if(!req.isAuthenticated()){
+			res.redirect('/getstarted');
+		}else{
+			// console.log(req.user);
+			jade.renderFile('./public/jade/account.jade',{theuser:req.user},function(err,html){
+				if(err){
+					res.send(err);
+				}
+				if(html){
+					res.send(html);
+				}
+			});
+		}
+	});
+	app.get('/chat/:chat_id',function(req,res){
+		if(!req.isAuthenticated()){
+			res.redirect('/getstarted');
+		}else{
+			console.log(req.params.chat_id);
+			console.log(req.user.nickname + ' ' + req.user._id);
+			Chat.findById(req.params.chat_id,function(err,chat){
+				console.log('Chat:',chat);
+				if(err){ return res.send(err); }
+				
+				//if( chat.user.equals(req.user._id) ){// - user is chat owner
+				if ( chat.users.some(function(u){ return u.equals(req.user._id); }) ) {
+					jade.renderFile('./public/jade/chat.jade',{theuser:req.user,chatId:chat._id},function(err,html){
+						if(err){
+							res.send(err);
+						}
+						if(html){
+							res.send(html);
+						}
+					});
+				}else{
+					return res.redirect('/account');
 				}
 			});
 		}
@@ -74,6 +111,7 @@ module.exports = function(app){
 	app.post('/newchat',function(req,res,next){
 		if(req.isAuthenticated()){
 			var chat = new Chat({user:req.user,title:req.body.chattitle});
+			chat.users.push(req.user);
 			chat.save(function(err){
 				if(err){
 					return next(err);
@@ -112,6 +150,23 @@ module.exports = function(app){
 			  		res.send(data);
 			  	}
 			  });
+		}else{
+			res.send('');
+		}
+	});
+	app.get('/_api/thechat/:chat_id',function(req,res){
+		if( req.isAuthenticated() ){
+			Chat.findById(req.params.chat_id,function(err,chat){
+				console.log('ANG init Chat:',chat);
+				if(err){ 
+					res.send(err);
+				//} else if ( chat.user.equals(req.user._id) ){ - user is chat owner
+				} else if ( chat.users.some(function(u){ return u.equals(req.user._id); }) ){
+					res.send(chat);
+				}else{
+					res.send('');
+				}
+			});
 		}else{
 			res.send('');
 		}

@@ -1,0 +1,10 @@
+p Create new chat:
+			form(name="newchatForm",action="/newchat",method="post")
+				.input-wrap
+					input.form-control#chattitle(name="chattitle",required)
+					button.btn.btn-info(type="submit") Create
+			p Chats
+				ul.list-group
+					li.list-group-item(ng-repeat="chat in chats")
+						a(href="/chat/{{chat._id}}")
+							| {{chat.title}}

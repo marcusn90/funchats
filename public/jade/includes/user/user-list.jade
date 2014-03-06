@@ -1,0 +1,4 @@
+p Users
+	ul.list-group
+		li.list-group-item(ng-repeat="usr in users")
+			| {{usr.nickname}}({{usr.email}})

@@ -1,0 +1,24 @@
+doctype html
+html
+	head
+		title FunChats
+
+		script(src="/libs/angular/angular.min.js")
+		script(src="/libs/angular-route/angular-route.min.js")
+		// script(src="/socket.io/socket.io.js")
+		script(src="/app/truechat.js")
+
+		link(href="/libs/bootstrap/dist/css/bootstrap.min.css",rel="stylesheet")
+		link(href="/css/style.css",rel="stylesheet")
+
+	body(ng-app="truechat",ng-controller="AccountCtrl",ng-init="nickname='#{theuser.nickname}'")
+		include ./includes/header
+		
+		div.container.main
+			include ./includes/user/user-list
+
+
+		div.container.main
+			include ./includes/user/chat-list
+
+

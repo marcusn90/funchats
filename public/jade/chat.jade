@@ -1,0 +1,31 @@
+doctype html
+html
+	head
+		title FunChats
+
+		script(src="/libs/angular/angular.min.js")
+		script(src="/libs/angular-route/angular-route.min.js")
+		script(src="/socket.io/socket.io.js")
+		script
+			| var Socket = io.connect('/');var CID = '#{chatId}';var U = '#{theuser.nickname}';
+		script(src="/app/truechat.js")
+
+		link(href="/libs/bootstrap/dist/css/bootstrap.min.css",rel="stylesheet")
+		link(href="/css/style.css",rel="stylesheet")
+
+	body(ng-app="truechat",ng-controller="ChatCtrl")
+		include ./includes/header
+		.container.main
+			h3 Welcome to {{chat.title}}({{chat._id}})
+			p Write:
+				form(name="msgForm",ng-submit="pushMessage()")
+					.input-wrap
+						input.form-control#thetext(ng-model="thetext",name="msg",msg-synch,required)
+						button.btn.btn-primary(ng-disabled="msgForm.msg.$error.required") Push
+				.bg-info.well {{remotetext}}
+
+				ul.list-group
+					li.list-group-item(ng-repeat="msg in messages")
+						span.badge.pull-right
+							|{{msg.date | date:'shortTime'}}
+						|{{msg.u}} -- {{msg.txt}}

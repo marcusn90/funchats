@@ -2,53 +2,11 @@ doctype html
 html
 	head
 		title FunChats
+		link(href="/libs/bootstrap/dist/css/bootstrap.min.css",rel="stylesheet")
+		link(href="/css/style.css",rel="stylesheet")
 
-		script(src="libs/angular/angular.min.js")
-		script(src="libs/angular-route/angular-route.min.js")
-		script(src="/socket.io/socket.io.js")
-		script(src="app/truechat.js")
-
-		link(href="libs/bootstrap/dist/css/bootstrap.min.css",rel="stylesheet")
-		link(href="css/style.css",rel="stylesheet")
-
-	body(ng-app="truechat",ng-controller="MainCtrl",ng-init="nickname='#{theuser.nickname}'")
-		header
-			.navbar
-				a(href="/logout").btn.btn-danger.navbar-btn.pull-right Logout
-				p.navbar-text
-					a.text-success.username(href="/")
-						span.icon.glyphicon.glyphicon-user
-						| #{theuser.nickname} (#{theuser.id})
-		
-		div.container.main
-			p Users
-				ul.list-group
-					li.list-group-item(ng-repeat="usr in users")
-						| {{usr.nickname}}({{usr.email}})
-
-		div.container.main
-			p Create new chat:
-			form(name="newchatForm",action="/newchat",method="post")
-				.input-wrap
-					input.form-control#chattitle(name="chattitle",required)
-					button.btn.btn-info(type="submit") Create
-			p Chats
-				ul.list-group
-					li.list-group-item(ng-repeat="chat in chats")
-						| {{chat.title}}
-		
-		div.container.main
-			p Message me:
-			form(name="msgForm",ng-submit="pushMessage()")
-				.input-wrap
-					input.form-control#thetext(ng-model="thetext",name="msg",msg-synch,required)
-					button.btn.btn-primary(ng-disabled="msgForm.msg.$error.required") Push
-			.bg-info.well {{remotetext}}
-
-			ul.list-group
-				li.list-group-item(ng-repeat="msg in messages | orderBy:'date':true")
-					span.badge.pull-right
-						|{{msg.date | date:'shortTime'}}
-					|{{msg.u}} -- {{msg.txt}}
-
-
+	body.jumbotron
+			.container.main
+				h1 Welcome
+				p
+					a(href="/getstarted").btn.btn-success.btn-jg Get Started
