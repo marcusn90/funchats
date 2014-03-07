@@ -1,7 +1,11 @@
 header
-			.navbar
-				a(href="/logout").btn.btn-danger.navbar-btn.pull-right Logout
-				p.navbar-text
-					a.text-success.username(href="/account")
-						span.icon.glyphicon.glyphicon-user
-						| #{theuser.nickname} (#{theuser.id})
+	.navbar
+		if theuser
+			a(href="/logout").btn.btn-danger.navbar-btn.pull-right Logout
+			p.navbar-text
+				a.text-success.username(href="/account")
+					span.icon.glyphicon.glyphicon-user
+					| #{theuser.nickname} (#{theuser.id})
+		else
+			p.navbar-text
+				a(href="/getstarted").btn.btn-success.btn-jg Get Started

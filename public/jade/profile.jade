@@ -1,0 +1,34 @@
+doctype html
+html
+	head
+		title #{theprofile.nickname} | FunChats
+		script(src="/libs/angular/angular.min.js")
+		script(src="/libs/angular-route/angular-route.min.js")
+		// script(src="/socket.io/socket.io.js")
+		script(src="/app/truechat.js")
+		link(href="/libs/bootstrap/dist/css/bootstrap.min.css",rel="stylesheet")
+		link(href="/css/style.css",rel="stylesheet")
+	
+	body
+		include ./includes/header
+		div.container.main
+			.row
+				div.col-md-3
+					span.glyphicon.glyphicon-user(style="font-size:50px;") 
+				.profile-info.col-md-9
+					p #{theprofile.nickname}
+					p #{theprofile.email}
+					p #{theprofile._id}
+			if theuser
+				.container.main(ng-app="truechat",ng-controller="ChatInviteCtrl")
+					p
+						a(ng-click="showChats()")
+							| Show Chats
+
+					ul.list-group
+						li.list-group-item(ng-repeat="chat in chats")
+							a.label.label-info.pull-right(href="/add/profile/#{theprofile._id}/to/chat/{{chat._id}}")
+								span.glyphicon.glyphicon-plus
+								span Invite
+							a(href="/chat/{{chat._id}}")
+								| {{chat.title}}

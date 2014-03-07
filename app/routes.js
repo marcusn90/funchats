@@ -72,6 +72,48 @@ module.exports = function(app){
 			});
 		}
 	});
+	app.get('/profile/:prof_id',function(req,res){
+		console.log(req.params.prof_id);
+		// console.log(req.user.nickname + ' ' + req.user._id);
+		User.findById(req.params.prof_id,function(err,prof){
+			console.log('prof:',prof);
+			if(err){ return res.send(err); }
+			jade.renderFile('./public/jade/profile.jade',{theuser:req.user,theprofile:prof},function(err,html){
+				if(err){
+					res.send(err);
+				}
+				if(html){
+					res.send(html);
+				}
+			});
+		});
+	});
+	app.get('/add/profile/:profile_id/to/chat/:chat_id',function(req,res){
+		var pId = req.params.profile_id;
+		var cId = req.params.chat_id;
+		if(pId && cId)
+			console.log('ADD USER');
+			console.log(req.params.profile_id);
+			console.log('TO CHAT');
+			console.log(req.params.chat_id);
+			User.findById(pId,function(err,doc){
+				if(err || !doc){
+					return res.send('Trying to add not existing profile');
+				}
+				Chat.findById(cId,function(err,doc){
+					if(err || !doc){
+						return res.send('Trying to add to not existing chat');
+					}
+					doc.users.push(pId);
+					doc.save(function(err){
+						if(err){
+							return res.send('Error while saving new profile to chat');
+						}
+						return res.redirect('/chat/'+cId);
+					});
+				});
+			});
+	});
 
 	app.post('/login', function(req, res, next) {
 	  passport.authenticate('local',
@@ -142,17 +184,50 @@ module.exports = function(app){
 
 	app.get('/_api/chats',function(req,res){
 		if( req.isAuthenticated() ){
-			Chat.find({'user':req.user.id},function(err,data){
-			  	if(err){
-			  		console.log(err);
-			  		res.send(err);
-			  	}else{
-			  		res.send(data);
-			  	}
-			  });
+
+			/* map reduce to get user -> chats */
+			var mrConf = {
+				map:function(){
+					for(var i in this.users){
+						emit(this.users[i],{id:this._id,title:this.title,userscount:this.users.length});
+					}
+				},
+				reduce:function(k,v){
+					var result = {chats:[]};
+					for(var i in v){result.chats.push(v[i])}
+					return result;
+				}
+			}
+			
+			// var promise = Chat.mapReduce(mrConf);
+			// promise.then(function(data){});
+			Chat.mapReduce(mrConf,function(err,data){
+				console.log(data);
+				var userChats = data.filter(function(item){
+					return item._id == req.user.id;
+							});
+				if(userChats.length){
+					return res.send(userChats[0].value.chats);
+				} else {
+					return res.send('');
+				}
+				
+				
+			});
 		}else{
 			res.send('');
 		}
+		// 	Chat.find({'user':req.user.id},function(err,data){
+		// 	  	if(err){
+		// 	  		console.log(err);
+		// 	  		res.send(err);
+		// 	  	}else{
+		// 	  		res.send(data);
+		// 	  	}
+		// 	  });
+		// }else{
+		// 	res.send('');
+		// }
 	});
 	app.get('/_api/thechat/:chat_id',function(req,res){
 		if( req.isAuthenticated() ){

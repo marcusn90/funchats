@@ -55,6 +55,18 @@ angular.module('truechat',[])
 	}
 	
 })
+.controller('ChatInviteCtrl',function($scope,$http){
+	$scope.chats = [];
+	$scope.showChats = function(){
+		$http.get('/_api/chats')
+		.success(function(data){
+			$scope.chats = data;
+		})
+		.error(function(data){
+			$scope.chats.push({title:'Sorry, no chats.'});
+		});
+	}
+})
 .directive('msgSynch',function(){
 	return {
 		require:'ngModel',
