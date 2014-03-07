@@ -22,13 +22,14 @@ html
 			if theuser
 				.container.main(ng-app="truechat",ng-controller="ChatInviteCtrl")
 					p
-						a(ng-click="showChats()")
+						a.show-chats(ng-click="showChats()")
 							| Show Chats
+							span.glyphicon.glyphicon-chevron-down
 
 					ul.list-group
 						li.list-group-item(ng-repeat="chat in chats")
-							a.label.label-info.pull-right(href="/add/profile/#{theprofile._id}/to/chat/{{chat._id}}")
+							a.label.label-info.pull-right(href="/add/profile/#{theprofile._id}/to/chat/{{chat.id}}")
 								span.glyphicon.glyphicon-plus
 								span Invite
-							a(href="/chat/{{chat._id}}")
+							a(href="/chat/{{chat.id}}")
 								| {{chat.title}}
