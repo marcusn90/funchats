@@ -202,12 +202,13 @@ module.exports = function(app){
 			// var promise = Chat.mapReduce(mrConf);
 			// promise.then(function(data){});
 			Chat.mapReduce(mrConf,function(err,data){
+				if(!data){ return res.send(''); }
 				console.log(data);
 				var userChats = data.filter(function(item){
 					return item._id == req.user.id;
 							});
 				if(userChats.length){
-					return res.send(userChats[0].value.chats);
+					return userChats[0].value.chats ? res.send(userChats[0].value.chats):res.send([userChats[0].value]);
 				} else {
 					return res.send('');
 				}

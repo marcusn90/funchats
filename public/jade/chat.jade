@@ -7,7 +7,7 @@ html
 		script(src="/libs/angular-route/angular-route.min.js")
 		script(src="/socket.io/socket.io.js")
 		script
-			| var Socket = io.connect('/');var CID = '#{chatId}';var U = '#{theuser.nickname}';
+			| var Socket = io.connect('/');var CID = '#{chatId}';var U = '#{theuser.nickname}';var UID = '#{theuser.id}';
 		script(src="/app/truechat.js")
 
 		link(href="/libs/bootstrap/dist/css/bootstrap.min.css",rel="stylesheet")
@@ -24,8 +24,12 @@ html
 						button.btn.btn-primary(ng-disabled="msgForm.msg.$error.required") Push
 				.bg-info.well {{remotetext}}
 
-				ul.list-group
-					li.list-group-item(ng-repeat="msg in messages")
-						span.badge.pull-right
-							|{{msg.date | date:'shortTime'}}
-						|{{msg.u}} -- {{msg.txt}}
+				ul.list-group.chat-messages
+					li.list-group-item.row(ng-repeat="msg in messages")
+						.col-md-2.username
+							span.badge(ng-class="{'guest':msg.guest}") {{msg.u}}
+						.col-md-9.message-text {{msg.txt}}
+						.col-md-1
+							span.badge.pull-right
+								|{{msg.date | date:'shortTime'}}
+						

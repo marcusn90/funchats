@@ -9,3 +9,6 @@ header .navbar{width:600px;margin:0 auto;}
 .navbar .username:hover{color:#C4EEC2;text-decoration:none;}
 .username .icon{margin-right:5px;}
 .show-chats{cursor:pointer;}
+.no-results-msg{padding: 10px 5px;}
+.chat-messages .username .badge{background-color:#47A76D;}
+.chat-messages .username .guest{background-color:#E2520E;}

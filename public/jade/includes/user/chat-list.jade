@@ -1,5 +1,6 @@
 p Chats
-	ul.list-group
-		li.list-group-item(ng-repeat="chat in chats")
-			a(href="/chat/{{chat.id}}")
-				| {{chat.title}}({{chat.userscount}})
+p.no-results-msg.bg-danger.text-danger(ng-hide="chats.length") Sorry, no chats found!
+ul.list-group
+	li.list-group-item(ng-repeat="chat in chats")
+		a(href="/chat/{{chat.id}}")
+			| {{chat.title}}({{chat.userscount}})

@@ -1,5 +1,6 @@
 p Users
-	ul.list-group
-		li.list-group-item(ng-repeat="usr in users")
-			a.profile-link(href="/profile/{{usr._id}}")
-				| {{usr.nickname}}({{usr.email}})
+p.no-results-msg.bg-danger.text-danger(ng-hide="users.length") Sorry, no users found!
+ul.list-group
+	li.list-group-item(ng-repeat="usr in users")
+		a.profile-link(href="/profile/{{usr._id}}")
+			| {{usr.nickname}}({{usr.email}})
